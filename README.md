@@ -1,1 +1,1 @@
-# laboratorio_python_25-26
+Repository del corso di Python 2025/2026
