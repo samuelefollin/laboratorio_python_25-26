@@ -1,3 +1,11 @@
+#File: Esercizio4.py
+#
+#Autore: Samuele Follin
+#
+#Data: 21/07/2026
+#
+#Descrizione: Svolgimento dell'Esercizio 4
+
 rubrica = {
   'Paolino Paperino': {'giorno': 9,
                       'mese': 'giugno',
@@ -15,7 +23,7 @@ rubrica = {
 'Madoka Ayukawa': {'giorno': 25, 'mese': 'maggio', 'anno': 1969, 'età': 57, 'sesso': 'F', 'mail': 'madoka_sax@asahi_net.jp'}
 }
 
-#---------------------------------------------------------------
+#----- PUNTO 1 -----
 
 with open('rubrica.txt', 'w') as file_rubrica:                                 #apro il file con il context manager, così non devo chiuderlo alla fine
     for personaggio in rubrica:                                                #scrivo uno per uno i dati necessari all'interno del file, separandoli con le virgole
@@ -34,14 +42,14 @@ with open('rubrica.txt', 'w') as file_rubrica:                                 #
         file_rubrica.write(rubrica[personaggio]['mail'])
         file_rubrica.write('\n')                                               #in questo modo si va a capo per ogni personaggio
 
-#-------------------------------------------------------------------
+#----- PUNTO 2 -----
 
 import json
 
-with open('rubrica.json', 'w') as file_rubrica:                          #così ho creato un file rubrica.json e lo affido alla variabile file_rubrica
+with open('rubrica.json', 'w') as file_rubrica:                          #così creo un file rubrica.json e lo affido alla variabile file_rubrica
     json.dump(rubrica, file_rubrica)                                     #rubrica è l'oggetto che salvo in file_rubrica (ossia il file 'rubrica.json')
 
-#-------------------------------------------------------------------
+#----- PUNTO 3 -----
 
 with open('rubrica.json', 'r') as file_rubrica:
     dati = json.load(file_rubrica)                                      #leggo il file in un dizionario tramite .load e assegno alla variabile dati
