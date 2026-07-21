@@ -1,7 +1,15 @@
+#File: Esercizio6_1.py
+#
+#Autore: Samuele Follin
+#
+#Data: 21/07/2026
+#
+#Descrizione: Svolgimento dell'Esercizio 6, prima parte
+
 import json
 
 class Rubrica:
-    def __init__(self, rubrica = None):                              #imposto un valore di default, se una rubrica non verrà aperta, allora ilvalore rimarrà None. serve per il metodo aggiungi
+    def __init__(self, rubrica = None):                             #imposto un valore di default, se una rubrica non verrà aperta, allora il valore rimarrà None. serve per il metodo aggiungi
         self.rubrica = rubrica
 
     @classmethod                                                    #creo un metodo di classe per l'inizializzazione in json, grazie a cls ogni oggetto della classe 'memorizza' questo metodo
@@ -17,7 +25,7 @@ class Rubrica:
             for riga in file_rubrica:                               #leggo tutti i dati grazie a questo ciclo for
                 dati = riga.split(",")                              #così ogni riga diventa una lista, gli elementi sono tutti i dati, poiché sono separati da virgole
                 personaggio = dati[0]                               #il personaggio è il primo elemento, il giorno è il secondo, ecc.
-                rubrica[personaggio] = {
+                rubrica[personaggio] = {                            #il valore delle chiavi personaggi sono i dizionari annidati
                     'giorno': int(dati[1]),
                     'mese': dati[2],
                     'anno': int(dati[3]),
@@ -32,7 +40,7 @@ class Rubrica:
             with open(file, 'r') as file_rubrica:
                 self.rubrica = json.load(file_rubrica)
 
-        elif file.endswith('.txt'):                                 #NON posso utilizzare .read(), se lo faccio trasforma in stringa e poi si intralcia con gli altri metodi
+        elif file.endswith('.txt'):                                 #non posso utilizzare .read(), se lo faccio trasforma in stringa e poi si intralcia con gli altri metodi
             self.rubrica = {}
             with open(file, 'r') as file_rubrica:
                 for riga in file_rubrica:                           #stesso procedimento dell'inizializzazione
@@ -69,8 +77,8 @@ class Rubrica:
                 json.dump(self.rubrica, file_rubrica)
         elif file.endswith('.txt'):
                 with open(file, 'w') as file_rubrica:
-                    for personaggio, dati in self.rubrica.items():            #devo mettere .items per riuscire ad accedere anche ai valori
-                        riga = (                                              #compatto in righe perché .write ammette un solo elemento
+                    for personaggio, dati in self.rubrica.items():           #devo mettere .items per riuscire ad accedere anche ai valori, il metodo .items() infatti restituisce le coppie chiave-valore in tuple
+                        riga = (                                             #compatto in righe perché .write ammette un solo elemento
                         personaggio + ','
                         + str(dati['giorno']) + ','
                         + dati['mese'] +','
