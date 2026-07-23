@@ -2,7 +2,9 @@
 #
 #Autore: Samuele Follin
 #
-#Data: 20/07/2026
+#Data: 13/07/2026
+#
+#Versione: 1.0
 #
 #Descrizione: Svolgimento dell'Esercizio 2
 
@@ -49,7 +51,7 @@ print(f'Parole: {len(lista_parole)}')
 
 lista_caratteri_alfanum = []
 for lettera in testo_originale:
-    if lettera.isalnum():
+    if lettera.isalnum():                                        #se il carattere è alfanumerico allora viene aggiunto alla lista
         lista_caratteri_alfanum.append(lettera)
 
 print(f'Caratteri alfanumerici: {len(lista_caratteri_alfanum)}')

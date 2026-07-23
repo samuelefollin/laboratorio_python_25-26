@@ -2,7 +2,9 @@
 #
 #Autore: Samuele Follin
 #
-#Data: 18/07/2026
+#Data: 12/07/2026
+#
+#Versione: 1.0
 #
 #Descrizione: Svolgimento dell'Esercizio 1
 
@@ -64,12 +66,12 @@ def ricerca(lista):
         if valore % 5 == 0:                                       #se il resto della divisione per 5 è 0 (cioè il numero è multpilo di 5)
             print(valore)
     
-    no_multipli = True
+    no_multipli = True                                            #inizializzo a True
     for valore in lista:
         if valore % 5 == 0:
-            no_multipli = False
+            no_multipli = False                                   #se c'è anche un solo multiplo cambia valore in False
             break
-    if no_multipli is True:
+    if no_multipli is True:                                       #se è rimasta True allora non ci sono multipli
         print("Non sono presenti numeri divisibili per 5")
 
 #----- PUNTO 6 -----

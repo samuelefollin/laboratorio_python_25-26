@@ -4,6 +4,8 @@
 #
 #Data: 22/07/2026
 #
+#Versione: 1.0
+#
 #Descrizione: Simulatore interattivo della cattura di un Pokemon selvatico
 
 import random

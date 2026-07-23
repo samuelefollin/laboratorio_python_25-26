@@ -2,7 +2,9 @@
 #
 #Autore: Samuele Follin
 #
-#Data: 22/07/2026
+#Data: 21/07/2026
+#
+#Versione: 1.0
 #
 #Descrizione: Svolgimento dell'Esercizio 8, approccio LBYL
 
