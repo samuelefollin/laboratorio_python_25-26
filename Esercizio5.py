@@ -61,7 +61,7 @@ for i in range(10):
     main()
     lista_tempi.append(time.time() - start)                      #aggiungo ogni tempo alla lista
 
-print(sum(lista_tempi) / 10, 'è il tempo medio.')                #faccio la media dei tempi sommandoli tra loro e dividendo per 10
+print(sum(lista_tempi) / 10, 'è il tempo medio.\n')                #faccio la media dei tempi sommandoli tra loro e dividendo per 10
 
 #----- PUNTO 2 -----
 
@@ -78,7 +78,7 @@ def accumula_tentativi():                                        #funzione simil
         if soluzione_ok(scacchiera):
             solutions += 1
 accumula_tentativi()
-print(f'Ci sono voluti {len(lista_tentativi)} tentativi prima di trovare la soluzione.')
+print(f'Ci sono voluti {len(lista_tentativi)} tentativi prima di trovare la soluzione.\n')
 
 #----- PUNTO 3 -----
 
@@ -99,7 +99,7 @@ soluzioni = set()                                                  #grazie al re
 while len(soluzioni) < 10:
     soluzione = main_alternativo()
     soluzioni.add(tuple(soluzione))                                #serve cambiare il tipo in tupla perché i set ammettono solo oggetti non modificabili (una lista è modificabile, una tupla no)
-print('soluzioni uniche:', soluzioni)
+print('soluzioni uniche:', soluzioni, '\n')
 
 #----- PUNTO 4 -----
 
@@ -110,7 +110,7 @@ for i in range(10):
     soluzioni.append(tuple(soluzione))                                           #devo trasformare le soluzioni da aggiungere alla lista in tuple, così poi posso trasformare la lista in set
 
 duplicati = len(soluzioni) - len(set(soluzioni))                                 #attraverso questa sottrazione ottengo i duplicati perché nei set i duplicati non ci sono
-print('tra queste soluzioni:', soluzioni, 'i duplicati sono', duplicati)
+print('tra queste soluzioni:', soluzioni, 'i duplicati sono', duplicati, '\n')
 
 #----- PUNTO 5 -----
 
@@ -129,6 +129,7 @@ def main_NxN(n):                                                                
             solutions += 1      
             start_time = time.time()
 main_NxN(n)
+print('\n')
 
 #----- PUNTO 6 -----
 
@@ -152,7 +153,7 @@ def rotazione_90_gradi(soluzione):
     rotazione = [0, 0, 0, 0, 0, 0, 0, 0]                       #inizializziamo la rotazione
     for col in range(8):
         riga = soluzione[col]                                  #passa in rassegna la riga di ogni regina (la colonna corrisponde all'indice nella lista)
-        col_90 = 7 - riga                                      #7 perché in python si conta dallo 0
+        col_90 = 7 - riga                                      #7 perché in python si conta dallo 0, stiamo svolgendo una rotazione in senso orario
         riga_90 = col                                          #il nuovo valore della riga corrisponde al vecchio vaore della colonna
         rotazione[col_90] = riga_90                            #accoppiamo le nuove coordinate
     return rotazione
@@ -164,11 +165,9 @@ def tutte_le_rotazioni(soluzione):                                    #per sempl
     rotazione270 = rotazione_90_gradi(rotazione180)
     return [soluzione, rotazione90, rotazione180, rotazione270]       #ritorna una lista contenente le rotazioni della soluzione
 
-tutte_le_rotazioni(soluzione)
-
 soluzioni_uniche = []
 while len(soluzioni_uniche) < 5:
-    soluzione = main_alternativo()
+    soluzione = main_alternativo()                                    #main_alternativo perché il tempo è irrilevante
     rotazioni = tutte_le_rotazioni(soluzione)                         #con gli and controllo se la soluzione è realmente unica oppure no
     if soluzione not in soluzioni_uniche and rotazioni[1] not in soluzioni_uniche and rotazioni[2] not in soluzioni_uniche and rotazioni[3] not in soluzioni_uniche:
         soluzioni_uniche.append(soluzione)
