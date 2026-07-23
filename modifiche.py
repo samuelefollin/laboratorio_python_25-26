@@ -1,86 +1,183 @@
-#File: Esercizio1.py
+#File: Progetto_Pokemon.py
 #
 #Autore: Samuele Follin
 #
-#Data: 18/07/2026
+#Data: 22/07/2026
 #
-#Descrizione: Svolgimento dell'Esercizio 1
+#Descrizione: Simulatore interattivo della cattura di un Pokemon selvatico
+
+import random
+
+class Starter:                                                                    #creo la classe starter, principalmente per il metodo attacca che serve per attaccare il pokemon selvatico
+    '''una classe per definire il Pokemon con cui si sferrano gli attacchi'''
+    def __init__(self, nome):
+        '''inizializza il nome dello starter'''
+        self.nome = nome
+
+    def attacca(self):
+        '''sferra un attacco contro il pokemon selvatico'''
+        self.mossa = input('Quale mossa vuoi utilizzare? ')
+        danni_possibili = [0, 10, 20, 30, 40]
+        danni_inflitti = random.choice(danni_possibili)                           #danni inflitti scelti casualmente
+        hp_attuali = int(selezionatore.hp) - int(danni_inflitti)                  #calcolo gli hp dopo ogni danno
+        selezionatore.hp = hp_attuali                                             #aggiorno gli hp attuali, senza questa riga dopo ogni attacco si rigenererebbe la vita
+        if selezionatore.hp < 0:
+            selezionatore.hp = 0
+        if danni_inflitti == 0:                                                   #se i danni sono 0 c'è un messaggio dedicato
+            print(f"{selezionatore.nome} ha evitato l'attacco!")
+        else:
+            print(f'{starter.nome} ha sferrato la mossa {self.mossa} e ha inflitto {danni_inflitti} danni')
+        print(f'{selezionatore.nome} ha {selezionatore.hp} HP rimanenti')
+
+class Pokemon:                                                                    
+    '''una classe per definire le caratteristiche del Pokemon selvatico incontrato'''
+    def __init__(self, nome, hp, rarità, cattura):
+        '''inizializza identità e statistiche del Pokemon selvatico'''
+        self.nome = nome
+        self.hp = hp
+        self.hp_massimi = hp                                     #salva gli hp originali: durante la lotta hp diminuisce, mentre hp_massimi resta invariato per i calcoli di cattura
+        self.rarità = rarità
+        self.cattura = cattura
+
+class Pokeball:
+    '''una classe per rappresentare i diversi tipi di pokeball'''
+    def __init__(self, nome, bonus_cattura):
+        '''inizializza nome e bonus cattura della pokeball'''
+        self.nome = nome
+        self.bonus_cattura = bonus_cattura
+
+    def lancia(self):                                                                           #metodo di pokeball
+        '''utilizza la sfera selezionata e tenta la cattura del Pokemon incontrato'''
+        bonus_hp = int((selezionatore.hp_massimi - selezionatore.hp) / 2)                       #calcolo il bonus di cattura per gli hp rimanenti
+        probabilità_di_cattura = selezionatore.cattura + self.bonus_cattura + bonus_hp          #probabilità definita dall'attributo del pokemon, dalla pokeball e dal bonus hp
+        if probabilità_di_cattura > 97:
+            probabilità_di_cattura = 97                                                         #evito che vada sopra il 100 e aggiungo una minima possibilità di errore sempre
+        print(f'Hai il {probabilità_di_cattura}% di catturare {selezionatore.nome}. Premi invio per lanciare la {self.nome}')
+        input()
+        percentuale = range(1, 101)
+        risultato = random.choice(percentuale)                                                  #sceglie un numero casuale tra 1 e 100
+        if risultato <= probabilità_di_cattura:                                                 #se il numero estratto è minore della percentuale calcolata il pokemon è catturato
+            print(f'Hai catturato {selezionatore.nome}! Grande!')
+        else:
+            print(f'{selezionatore.nome} è uscito dalla {self.nome}.')
+            print(f'Hai un secondo tentativo. Premi invio per lanciare la {self.nome}')
+            input()
+            risultato = random.choice(percentuale)
+            if risultato <= probabilità_di_cattura:
+                print(f'Hai catturato {selezionatore.nome}! Grande!')
+            else:
+                print(f'{selezionatore.nome} è uscito  dalla {self.nome}. Oh no, è scappato! Andrà meglio la prossima volta...')
 
 
-print('Quanti numeri vuoi testare?')
-tentativi = int(input())
-if int(tentativi) <= 0:
-    print('Peggio per te...')
+print('Benvenuto nel simulatore di cattura Pokémon.')
+print("Prima di cimentarti nella cattura dovrai scegliere un Pokémon con cui iniziare l'avventura, ce ne sono tre a disposizione:\n1) Bulbasaur\n2) Charmander\n3) Squirtle")
+starter = input('Quale scegli? Bulbasaur, Charmander o Squirtle? ')
+while starter not in ['Bulbasaur'.lower(), 'Charmander'.lower(), 'Squirtle'.lower()]:         #se non è uno dei tre si continua a chiedere input
+    starter = input('So che è difficile, però devi scegliere! ')
+print(f"Quindi hai scelto {starter}, eh? Ottima scelta, Buona fortuna!")
+starter = Starter(starter)                                                                    #lo starter diventa un oggetto di tipo starter
+
+input('Premi invio per continuare')
+
+print("\nScegli un ambiente in cui andare a caccia di Pokémon. I Pokémon selvatici che incontrerai saranno determinati dall'ambiente che scegli.")
+print('Gli ambienti disponibili sono:\n1) Bosco\n2) Zona vulcanica\n3) Lago \n4) Centrale elettrica \n5) Caverna\n6) Tempio psichico\n7) Torre spettrale')
+ambiente = input('Hai una vasta scelta! Forza, quale preferisci? ')
+
+while ambiente not in [str(1), str(2), str(3), str(4), str(5), str(6), str(7)]:          #scelta dell'ambiente con i rispettivi pokemon selvatici
+    ambiente = input('Scegli: 1, 2, 3, 4, 5, 6 o 7? ')
+
+if ambiente == str(1):                                                                   #definisco la lista di pokemon incontrabili per ogni ambiente
+    pokemon_selvatici = [Pokemon("Caterpie", 45, "Comune", 80),
+                         Pokemon("Pidgey", 40, "Comune", 75),
+                         Pokemon("Oddish", 55, "Non comune", 55),
+                         Pokemon("Scyther", 75, "Raro", 25),
+                         Pokemon("Exeggutor", 100, "Molto raro", 10)]                    #ogni pokemon è un oggetto della classe Pokemon con tutti gli attributi
+elif ambiente == str(2):
+    pokemon_selvatici = [Pokemon("Vulpix", 50, "Comune", 70),
+                         Pokemon("Growlithe", 60, "Non comune", 50),
+                         Pokemon("Ponyta", 65, "Non comune", 40),
+                         Pokemon("Magmar", 80, "Raro", 25),
+                         Pokemon("Moltres", 120, "Leggendario", 1)]
+elif ambiente == str(3):
+    pokemon_selvatici = [Pokemon("Magikarp", 30, "Comune", 80),
+                         Pokemon("Poliwag", 45, "Comune", 70),
+                         Pokemon("Staryu", 55, "Non comune", 45),
+                         Pokemon("Lapras", 100, "Raro", 25),
+                         Pokemon("Articuno", 120, "Leggendario", 1)]
+elif ambiente == str(4):
+    pokemon_selvatici = [Pokemon("Magnemite", 40, "Comune", 75),
+                         Pokemon("Voltorb", 50, "Comune", 65),
+                         Pokemon("Pikachu", 70, "Non comune", 50),
+                         Pokemon("Electabuzz", 100, "Raro", 25),
+                         Pokemon("Zapdos", 120, "Leggendario", 1)]
+elif ambiente == str(5):
+    pokemon_selvatici = [Pokemon("Zubat", 40, "Comune", 75),
+                         Pokemon("Geodude", 55, "Comune", 60),
+                         Pokemon("Sandshrew", 65, "Non comune", 55),
+                         Pokemon("Onix", 110, "Raro", 25),
+                         Pokemon("Kabutops", 100, "Raro", 10)]
+elif ambiente == str(6):
+    pokemon_selvatici = [Pokemon("Abra", 50, "Comune", 60),
+                         Pokemon("Psyduck", 55, "Comune", 70),
+                         Pokemon("Drowzee", 80, "Non comune", 40),
+                         Pokemon("Mr Mime", 90, "Raro", 25),
+                         Pokemon("Mewtwo", 130, "Leggendario", 1)]
+elif ambiente == str(7):
+    pokemon_selvatici = [Pokemon("Gastly", 60, "Comune", 60),
+                         Pokemon("Haunter", 80, "Non comune", 40),
+                         Pokemon("Gengar", 100, "Raro", 10)]
+
+selezionatore = random.choice(pokemon_selvatici)                                #sceglie a caso un pokemon dalla lista, metodo di random
+
+
+pokeball = Pokeball("Pokeball", 0)                                              #creo tre oggetti di tipo Pokeball
+megaball = Pokeball("Megaball", 10)
+ultraball = Pokeball("Ultraball", 20)
+
+
+print('\nOttima scelta!')
+
+input('Premi invio per iniziare')
+
+print(f'\nTi sei imbattuto in un {selezionatore.nome} selvatico, un Pokémon {selezionatore.rarità}! Cosa vuoi fare?')          #la prima scelta: attaccare o tentare subito la cattura
+print('1) Attaccare\n2) Tentare la cattura')
+print('Se tenti la cattura subito, poi non potrai più attaccare! Inoltre, per la cattura hai due tentativi a disposizione.')
+scelta = input('Scegli, 1 o 2? ')
+while scelta not in [str(1), str(2)]:
+    scelta = input('Scegli, 1 o 2? ')
+
+if scelta == str(1):                                                                         #se l'utente sceglie di attaccare
+    starter.attacca()                                                                        #lo starter effettua l'attacco con il metodo
+    scelta_due = input('Vuoi sferrare un altro attacco?\n1) Si\n2) No\n ')
+    while scelta_due not in [str(1), str(2)]:
+        scelta_due = input('Scegli! 1 o 2? ')
+    while scelta_due == str(1):
+        starter.attacca()
+        if selezionatore.hp <= 0:                                                            #se il pokemon esaurisce gli hp
+            print(f'Il {selezionatore.nome} selvatico è andato KO! Dovevi andarci più piano...')
+            break                                                                            #il gioco finisce
+        scelta_due = input('Vuoi sferrare un altro attacco?\n1) Si\n2) No\n ')
+    if selezionatore.hp > 0:
+        sfera = input('Allora è il momento di catturarlo! Scegli:\n1) Pokéball\n2) Megaball\n3) Ultraball\n')
+        while sfera not in [str(1), str(2), str(3)]:
+            sfera = input('Scegli una sfera! 1, 2 o 3?')
+        if sfera == str(1):                                                                   #assegno ogni scelta alla pokeball corrispondente
+            sfera = pokeball
+        elif sfera == str(2):
+            sfera = megaball
+        elif sfera == str(3):
+            sfera = ultraball
+        sfera.lancia()
+
 else:
-    print('Ottimo, inizia pure.')
-
-#----- PUNTO 1 -----
-
-n = int(input())                                         #l'input deve essere un nmero intero
-
-def is_pari(n):                                              #il parametro della funzione è il numero inserito in input
-    '''controlla se il numero inserito è un numero pari'''
-    if int(n) % 2 == 0:                                      #se il resto della divisione è uguale a zero
-        return True
-    else:
-        return False
-    
-#----- PUNTO 2 -----
-
-def is_positivo(n):
-    '''controlla se l'input è un numero positivo e lo restituisce se lo è'''
-    while int(n) <= 0:                                       #uso while perché è un loop con condizione
-        n = int(input())                                     #finché n è negativo o zero il ciclo continua
-    return n        
-
-#----- PUNTO 3 -----
-
-def genera_lista(n):
-    '''applica la congettura di Collatz al numero e genera una lista con tutti i numeri risultanti'''
-    lista = [n]                               #creo una lista che momentaneamente contiene solo l'input
-    while n != 1 and len(lista) <= 100:       #appena una delle due condizioni viene smentita il ciclo si arresta
-        if int(n) % 2 == 0:                   #se il numero è pari viene diviso per due
-            n = int(int(n) / 2)
-        else:                                 #se il numero è dispari viene moltiplicato per 3 e sommato di 1
-            n = int(int(n) * 3 + 1)           
-        lista.append(n)                       #in ogni caso, il numero viene aggiunto alla lista
-    return lista                        
-
-#----- PUNTO 4 -----
-
-lista = genera_lista(n)                              #associo alla variabile lista la lista generata dal punto precedente
-
-def analizza_sequenza(lista):
-    '''definisce il massimo e la lunghezza della lista e la somma di tutti i suoi elementi'''
-    return max(lista), len(lista), sum(lista)        #la funzione restituisce una tupla contenente questi tre valori
-
-#----- PUNTO 5 -----
-
-def ricerca(lista):
-    ''' analizza la lista e stampa a schermo i valori divisibili per 5'''
-    for valore in lista:
-        if valore % 5 == 0:                                       #se il resto della divisione per 5 è 0 (cioè il numero è multpilo di 5)
-            print(valore)
-    if all(valore % 5 != 0 for valore in lista):                  #all() restituisce True se tutti i valori di un iterabile sono True, False se almeno uno è False
-        print('Non sono presenti numeri divisibili per 5')        #l'if va messo fuori dal for, se no stampa il messaggio per ogni numero non multiplo di 5
-
-#----- PUNTO 6 -----
-
-lunghezza_massima = 0                                                    #inizializzo: do un valore di partenza alla lunghezza massima
-numero_migliore = 0                                                      #inizializzo: do un valore di partenza al numero migliore
-
-for tentativo in range(tentativi):                                       #le funzioni sono ripetute il numero di volte indicato dall'utente                                                    
-    print(is_pari(n))                                                    #chiamo is_pari con il print, così il return viene stampato a schermo
-    n = is_positivo(n)                                                   #chiamo la funzione is_positivo e salvo il valore generato in una variabile
-    lista = genera_lista(n)                                              #in questo modo genera sempre nuove liste, se no studia sempre e solo la prima
-    print(genera_lista(n))                                               #chiamo genera_lista e stampo a schermo la lista generata con return
-    print(analizza_sequenza(lista))                                      #chiamo analizza_sequenza e stampo a schermo i valori (raggruppati in una tupla) del return
-    ricerca(lista)                                                       #chiamo ricerca senza print perché è già all'interno della funzione
-    if len(lista) > lunghezza_massima:                                   #cerco la lista più lunga, con questo if aggiorno la lunghezza massima e il numero migliore a essa associato
-        lunghezza_massima = len(lista)                                   
-        numero_migliore = n
-    if tentativo < tentativi - 1:                                        #senza questo if chiederebbe un input per poi ignorarlo e stampare il messaggio dei tentativi esauriti
-        print('Prossimo numero?')
-        n = int(input())
-    
-    print('Hai finito i tentativi. Il numero iniziale che ha generato la sequenza più lunga è il:', numero_migliore)
+    print('Vuoi lanciare una Pokéball, una Megaball o una Ultraball? Più e prestigata la sfera, più alta sarà la possibilità di catturarlo')
+    sfera = input('Scegli:\n1) Pokéball\n2) Megaball\n3) Ultraball\n')
+    while sfera not in [str(1), str(2), str(3)]:
+        sfera = input('Scegli una sfera! 1), 2) o 3)?')
+    if sfera == str(1):                                                                      #assegno ogni scelta alla pokeball corrispondente
+        sfera = pokeball
+    elif sfera == str(2):
+        sfera = megaball
+    elif sfera == str(3):
+        sfera = ultraball
+    sfera.lancia()
