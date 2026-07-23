@@ -1,98 +1,52 @@
-import json
+print('Ciao! Ti va di fare un paio di tabelline?')
+while True:                                                                                      #ciclo infinito, condizione sempre vera... si esce solo grazie al break
+    try:                                                                                         #uso try-except, così gestisco i caratteri e i numeri che sono decimali
+        numero = int(input('Dimmi un numero intero! '))                                          #senza int() l'input è considerato stringa e i risultati delle tabelline sono sbagliati
+        break                                                                                    #permette di uscire dal ciclo, l'unico modo è passare per break scegliendo un numero intero
+    except ValueError:
+        print('Ehi, scegli un numero intero! Non digitare lettere, caratteri speciali o numeri decimali.')                        #continuo finché non viene digitato un numero intero
 
-class Rubrica:
-    def __init__(self, rubrica = None):                              #imposto un valore di default, se una rubrica non verrà aperta, allora ilvalore rimarrà None. serve per il metodo aggiungi
-        self.rubrica = rubrica
+print(f'Ok... hai scelto il numero {numero}, eh? Vediamo come te la cavi, dovrai indovinare tutti i risultati! Quanto fa {numero} x 0?')
 
-    @classmethod                                                    #creo un metodo di classe per l'inizializzazione in json, grazie a cls ogni oggetto della classe 'memorizza' questo metodo
-    def inizializzazione_in_json(cls, file):
-        with open(file, 'r') as file_rubrica:
-            rubrica = json.load(file_rubrica)
-        return cls(rubrica)
-
-    @classmethod                                                    #creo un metodo di classe per l'inizializzazione in testo
-    def inizializzazione_in_txt(cls, file):
-        with open(file, "r") as file_rubrica:
-            rubrica = {}
-            for riga in file_rubrica:                               #leggo tutti i dati grazie a questo ciclo for
-                dati = riga.split(",")                              #così ogni riga diventa una lista, gli elementi sono tutti i dati, poiché sono separati da virgole
-                personaggio = dati[0]                               #il personaggio è il primo elemento, il giorno è il secondo, ecc.
-                rubrica[personaggio] = {
-                    'giorno': int(dati[1]),
-                    'mese': dati[2],
-                    'anno': int(dati[3]),
-                    'età': int(dati[4]),
-                    'sesso': dati[5],
-                    'mail': dati[6]
-                    }
-        return cls(rubrica)
-    
-    def apri(self, file):
-        if file.endswith('.json'):                                  #distinguo i due casi tramite endswith, in entrambi i casi apro il file in modalità read
-            with open(file, 'r') as file_rubrica:
-                self.rubrica = json.load(file_rubrica)
-
-        elif file.endswith('.txt'):                                 #NON posso utilizzare .read(), se lo faccio trasforma in stringa e poi si intralcia con gli altri metodi
-            self.rubrica = {}
-            with open(file, 'r') as file_rubrica:
-                for riga in file_rubrica:                           #stesso procedimento dell'inizializzazione
-                    dati = riga.split(",")
-                    personaggio = dati[0]
-                    self.rubrica[personaggio] = {
-                    'giorno': int(dati[1]),
-                    'mese': dati[2],
-                    'anno': int(dati[3]),
-                    'età': int(dati[4]),
-                    'sesso': dati[5],
-                    'mail': dati[6]
-                }
-    
-    def aggiungi(self, personaggio, dati):
-        if self.rubrica is None:                                   #la rubrica risulta None se nessuna variabile le è stata assegnata: infatti il default di rubrica in init è None
-            print('Prima apri una rubrica')
+lista_corrette = []                                                                                        #questa lista serve a tenere il conto delle soluzioni corrette
+def tabelline(numero):
+    for i in range(10):                                                                                    #passo in rassegna tutti i numeri da 0 a 9
+        while True:                                                                                        #anche qui devo assicurarmi di ricevere solo interi, stesso while di prima con try-except
+            try:
+                risposta = int(input())                                                                    #anche qui ho bisogno che l'input sia di tipo int, non str
+                break
+            except ValueError:
+                print('Il risultato della moltiplicazione di due interi è un intero, suvvia!')
+        if risposta == numero * i:                                                                          #creo due diverse frasi in base alla risposta data
+            lista_corrette.append(risposta)
+            yield f'Corretto! Era {numero * i}. E ora, quanto fa {numero} x {i+1}?'
         else:
-            self.rubrica[personaggio] = dati
+            yield f'Hai sbagliato! Il risultato corretto era {numero * i}. Dai, prova a calcolare {numero} x {i+1}'
 
-    def rimuovi(self, personaggio):
-        if len(self.rubrica) == 0:                                 #se la rubrica è vuota
-            print('La rubrica è vuota')
-        elif personaggio in self.rubrica:
-            del self.rubrica[personaggio]
-        else:
-            print('Il contatto', personaggio, 'non esiste in rubrica')
+ 
+g = tabelline(numero)                                               #creo così l'oggetto generatore
 
-    def salva(self, file):
-        if len(self.rubrica) == 0:
-            print('La rubrica è vuota')
-        elif file.endswith('.json'):                                         #utilizzo il metodo .dump del modulo json
-            with open(file, 'w') as file_rubrica:
-                json.dump(self.rubrica, file_rubrica)
-        elif file.endswith('.txt'):
-                with open(file, 'w') as file_rubrica:
-                    for personaggio, dati in self.rubrica.items():            #devo mettere .items per riuscire ad accedere anche ai valori
-                        riga = (                                              #compatto in righe perché .write ammette un solo elemento
-                        personaggio + ','
-                        + str(dati['giorno']) + ','
-                        + dati['mese'] +','
-                        + str(dati['anno']) + ','
-                        + str(dati['età']) + ','
-                        + dati['sesso'] + ','
-                        + dati['mail']
-                        )
-                        file_rubrica.write(riga + '\n')
-                
-    
-    def stampa(self, personaggio):
-        if len(self.rubrica) == 0:
-            print('La rubrica è vuota')
-        elif personaggio in self.rubrica:
-            dati = self.rubrica[personaggio]                                #i dati sono i valori delle chiavi personaggio (cioè dei dizionari)
-            print('nome: ', personaggio)
-            print('giorno: ', dati['giorno'])                               #stampo ogni valore del dizionario annidato
-            print('mese: ', dati['mese'])
-            print('anno: ', dati['anno'])
-            print('età: ', dati['età'])
-            print('sesso: ', dati['sesso'])
-            print('mail: ', dati['mail'])
-        else:
-            print('Il contatto', personaggio, 'non esiste in rubrica')
+for i in range(10):
+    print(next(g))                                              #grazie allo yield posso andare avanti con gli indici del range
+
+while True:                                                           #per il risultato di n x 10, stesso try-except di prima
+    try:
+        risposta = int(input())                                       #anche qui ho bisogno che l'input sia intero
+        break
+    except ValueError:
+        print('Il risultato della moltiplicazione di due interi è un intero, suvvia!')
+if risposta == numero * 10:                                                #per il 10 devo creare un if a parte, se lo metto dentro la funzione dovrei fare range(11) e mi chiederebbe n x 11 senza ottenere risposta
+    lista_corrette.append(risposta)
+    print('Corretto!\n')     
+else:
+    print(f'Hai sbagliato! Il risultato corretto era {numero * 10}\n')  
+
+print(f'Hai totalizzato un punteggio di {len(lista_corrette)}/11')                               #il numero di elementi della lista corrisponde alle risposte corrette, stampo a schermo il punteggio
+if len(lista_corrette) < 4:                                                                      #stampo un messaggio diverso in base al numero di risposte corrette
+    print('Caspita... dovresti fare pratica, puoi solo migliorare!')
+elif 4 <= len(lista_corrette) <= 7:
+    print('Risultato migliorabile, con della pratica puoi correggere tutti i tuoi errori!')
+elif 7 < len(lista_corrette) <= 10:
+    print('Wow, ottimo risultato! Puoi senza dubbio raggiungere la perfezione, se ti eserciti ancora un po')
+elif len(lista_corrette) == 11:
+    print('Le tabelline sono il tuo forte! Ben fatto')
