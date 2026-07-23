@@ -9,17 +9,21 @@
 import json
 
 class Rubrica:
+    '''una classe per operare con file e rubriche'''
     def __init__(self, rubrica = None):                             #imposto un valore di default, se una rubrica non verrà aperta, allora il valore rimarrà None. serve per il metodo aggiungi
+        '''inizializza una rubrica con None di default'''
         self.rubrica = rubrica
 
-    @classmethod                                                    #creo un metodo di classe per l'inizializzazione in json, grazie a cls ogni oggetto della classe 'memorizza' questo metodo
+    @classmethod                                                    #metodo di classe, grazie a cls ogni oggetto della classe 'memorizza' questo metodo
     def inizializzazione_in_json(cls, file):
+        '''metodo della classe che inizializza la classe con un file json'''
         with open(file, 'r') as file_rubrica:
             rubrica = json.load(file_rubrica)
         return cls(rubrica)
 
-    @classmethod                                                    #creo un metodo di classe per l'inizializzazione in testo
+    @classmethod                                                    
     def inizializzazione_in_txt(cls, file):
+        '''metodo della classe che inizializza la classe con un file di testo'''
         with open(file, "r") as file_rubrica:
             rubrica = {}
             for riga in file_rubrica:                               #leggo tutti i dati grazie a questo ciclo for
@@ -36,6 +40,7 @@ class Rubrica:
         return cls(rubrica)
     
     def apri(self, file):
+        '''apre la rubrica leggendola da un file'''
         if file.endswith('.json'):                                  #distinguo i due casi tramite endswith, in entrambi i casi apro il file in modalità read
             with open(file, 'r') as file_rubrica:
                 self.rubrica = json.load(file_rubrica)
@@ -56,12 +61,14 @@ class Rubrica:
                 }
     
     def aggiungi(self, personaggio, dati):
+        '''aggiunge un elemento in rubrica'''
         if self.rubrica is None:                                   #la rubrica risulta None se nessuna variabile le è stata assegnata: infatti il default di rubrica in init è None
             print('Prima apri una rubrica')
         else:
             self.rubrica[personaggio] = dati
 
     def rimuovi(self, personaggio):
+        '''rimuove un personaggio dalla rubrica'''
         if len(self.rubrica) == 0:                                 #se la rubrica è vuota
             print('La rubrica è vuota')
         elif personaggio in self.rubrica:
@@ -70,6 +77,7 @@ class Rubrica:
             print('Il contatto', personaggio, 'non esiste in rubrica')
 
     def salva(self, file):
+        '''salva la rubrica su un file'''
         if len(self.rubrica) == 0:
             print('La rubrica è vuota')
         elif file.endswith('.json'):                                         #utilizzo il metodo .dump del modulo json
@@ -77,7 +85,7 @@ class Rubrica:
                 json.dump(self.rubrica, file_rubrica)
         elif file.endswith('.txt'):
                 with open(file, 'w') as file_rubrica:
-                    for personaggio, dati in self.rubrica.items():           #devo mettere .items per riuscire ad accedere anche ai valori, il metodo .items() infatti restituisce le coppie chiave-valore in tuple
+                    for personaggio, dati in self.rubrica.items():           #il metodo .items() infatti restituisce le coppie chiave-valore in tuple
                         riga = (                                             #compatto in righe perché .write ammette un solo elemento
                         personaggio + ','
                         + str(dati['giorno']) + ','
@@ -89,8 +97,8 @@ class Rubrica:
                         )
                         file_rubrica.write(riga + '\n')
                 
-    
     def stampa(self, personaggio):
+        '''stampa a schermo le informazioni di un contatto'''
         if len(self.rubrica) == 0:
             print('La rubrica è vuota')
         elif personaggio in self.rubrica:
